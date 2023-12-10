@@ -21,17 +21,26 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-const server = http.createServer(app);
-
-server.listen(8080, () => {
-  console.log('Server listening on port 8080');
-});
-
 const MONGO_URI =
   'mongodb+srv://admin:admin@cluster0.xf6wbsn.mongodb.net/?retryWrites=true&w=majority';
 
-mongoose.Promise = Promise;
-mongoose.connect(MONGO_URI);
-mongoose.connection.on('error', (error: Error) => console.log(error));
+async function startServer() {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log('MongoDB Connected');
 
+    const server = http.createServer(app);
+
+    server.listen(8080, () => {
+      console.log('Server listening on port 8080');
+    });
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  }
+}
+
+// Routes go here
 app.use('/', router());
+
+// Connect to the database before starting the server
+startServer();
