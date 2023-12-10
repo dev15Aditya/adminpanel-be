@@ -39,7 +39,6 @@ async function startServer() {
   }
 }
 
-// Routes go here
 app.use('/', router());
 
 // Connect to the database before starting the server
