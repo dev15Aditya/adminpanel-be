@@ -5,6 +5,9 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 import router from './router';
 
@@ -22,12 +25,10 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-const MONGO_URI =
-  'mongodb+srv://admin:admin@cluster0.xf6wbsn.mongodb.net/?retryWrites=true&w=majority';
-
+const uri = process.env.MONGO_URI;
 async function startServer() {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(uri!);
     console.log('MongoDB Connected');
 
     const server = http.createServer(app);
